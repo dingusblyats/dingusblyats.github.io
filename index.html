@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DingusBlyats2026 Matchups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5f2;--card:#ffffff;--ink:#16171a;--muted:#6b6e76;--line:#e4e2dc;
+  --accent:#d9480f;--accent-soft:#fff1e8;--good:#1f7a4d;--good-soft:#e6f4ec;
+  --bad:#b42318;--chip:#efeee9;--mine:#2457c5;--mine-soft:#e8efff;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#111214;--card:#1a1b1f;--ink:#ececee;--muted:#9a9ca4;--line:#2a2c31;
+  --accent:#ff7a3d;--accent-soft:#2c1b12;--good:#4fc788;--good-soft:#14281d;
+  --bad:#ff6b5e;--chip:#25272c;--mine:#7aa2ff;--mine-soft:#18213a;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,system-ui,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:22px}
+h1{font-size:26px;margin:0;letter-spacing:-.02em}
+h1 span{color:var(--accent)}
+.sub{color:var(--muted);font-size:13px}
+.datebar{display:flex;align-items:center;gap:6px}
+.datebar button,.datebar select{font:inherit;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer}
+.datebar button:disabled{opacity:.35;cursor:default}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:30px 0 10px;font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.pname{font-weight:700;font-size:16px}
+.pmeta{color:var(--muted);font-size:12.5px}
+.line{font-family:"JetBrains Mono",monospace;font-size:12.5px;margin-top:8px;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.chip{font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--chip);color:var(--ink)}
+.chip.spike,.chip.bigmin{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.chip.starter{background:var(--mine-soft);color:var(--mine);font-weight:600}
+.chip.trend{background:var(--good-soft);color:var(--good);font-weight:600}
+.chip.blowout{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+.chip.top{background:var(--chip);font-weight:600}
+.minbar{display:flex;align-items:baseline;justify-content:space-between;margin-top:6px}
+.minbig{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.minbig small{font-size:12px;color:var(--muted);font-weight:500}
+.z{font-family:"JetBrains Mono",monospace;font-size:12px;padding:2px 6px;border-radius:6px}
+.zp{background:var(--good-soft);color:var(--good)}.zn{background:#0000;color:var(--bad)}
+.empty{color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:6px 8px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;user-select:none}
+th:first-child,td:first-child{text-align:left}
+td.n{font-family:"JetBrains Mono",monospace;font-size:12.5px}
+.tablebox{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+.game{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+.game summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.game summary::-webkit-details-marker{display:none}
+.score{font-weight:700;font-size:15px;min-width:150px}
+.score .w{color:var(--ink)} .score .l{color:var(--muted);font-weight:500}
+.gsum{font-size:12.5px;color:var(--muted);flex:1}
+.gsum b{color:var(--accent);font-weight:600}
+.outs{padding:0 14px 8px;font-size:12.5px;color:var(--muted)}
+.outs b{color:var(--ink);font-weight:600}
+.tag{font-size:10.5px;padding:1px 6px;border-radius:5px;margin-left:5px;vertical-align:1px}
+.tag.fa{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.tag.mine{background:var(--mine-soft);color:var(--mine);font-weight:600}
+.tag.own{color:var(--muted)}
+tr.fa td:first-child{font-weight:600}
+.controls{display:flex;gap:14px;align-items:center;font-size:13px;color:var(--muted);margin:-2px 0 10px}
+.controls label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.legend{font-size:12px;color:var(--muted);margin-top:8px}
+.warn{background:var(--accent-soft);color:var(--accent);padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:14px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:0 0 18px}
+.tabs a{padding:9px 14px;color:var(--muted);text-decoration:none;font-weight:600;font-size:14px;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a.on{color:var(--ink);border-color:var(--accent)}
+.hidden{display:none!important}
+.mcontrols{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:10px}
+.mcontrols select{font:inherit;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:5px 8px}
+.mcontrols label{display:flex;gap:6px;align-items:center;cursor:pointer}
+:root{--w:#cdeccf;--wi:#155d2c;--l:#f6d0cc;--li:#8e1f15;--t:#f7ebb0;--ti:#6b5300}
+@media (prefers-color-scheme: dark){:root{--hl:24%;--hd:82%;--w:#163d24;--wi:#7fe0a3;--l:#4a1c18;--li:#ff9d92;--t:#433a12;--ti:#f2d66b}}
+td.w{background:var(--w);color:var(--wi)} td.l{background:var(--l);color:var(--li)} td.t{background:var(--t);color:var(--ti)}
+.ctab td,.ctab th{text-align:center} .ctab td:nth-child(2),.ctab th:nth-child(2){text-align:left}
+.ctab td.pct{font-family:"JetBrains Mono",monospace;font-size:12.5px;font-weight:600}
+.ctab tr.me td:nth-child(2){font-weight:700}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(540px,1fr));gap:14px}
+.mgrid.one{grid-template-columns:1fr}
+@media (max-width:560px){.mgrid{grid-template-columns:1fr}}
+.mcard{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.mcard h3{margin:0;padding:12px 14px 4px;font-size:15px}
+.mcard .msub{padding:0 14px 10px;font-size:12.5px;color:var(--muted)}
+.mcard .msub b{color:var(--ink)}
+.mcard table td,.mcard table th{text-align:center;padding:5px 6px}
+.mcard table td:first-child,.mcard table th:first-child{text-align:left}
+.mcard tr.self td{background:var(--chip);font-weight:700}
+.mcard tr.opp td{box-shadow:inset 0 2px 0 var(--mine),inset 0 -2px 0 var(--mine)}
+.mcard tr.opp td:first-child{box-shadow:inset 2px 2px 0 var(--mine),inset 0 -2px 0 var(--mine)}
+.mcard tr.opp td:last-child{box-shadow:inset -2px 2px 0 var(--mine),inset 0 -2px 0 var(--mine)}
+.mcard tr.foot td{font-weight:700;border-top:2px solid var(--line)}
+.rs{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:500;opacity:.85;margin-left:4px}
+.vs{font-size:11px;color:var(--muted);font-weight:500}
+th.sortable{cursor:pointer;user-select:none;white-space:nowrap}
+th.sortable:hover{color:var(--ink)}
+th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+th[aria-sort="descending"],th[aria-sort="ascending"]{color:var(--accent)}
+th[aria-sort="descending"]::after{content:" ↓"}
+th[aria-sort="ascending"]::after{content:" ↑"}
+.sorthint{font-size:12px;color:var(--muted);margin:0 0 8px}
+
+[hidden]{display:none!important}
+.tfilter{position:relative}
+.tfilter>button{font:inherit;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+.tfilter>button.on{border-color:var(--accent);color:var(--accent);font-weight:600}
+.tfilter>button:focus-visible,.tfpop button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tfpop{position:absolute;z-index:30;top:calc(100% + 6px);left:0;width:270px;max-width:calc(100vw - 32px);background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:10px;display:flex;flex-direction:column;gap:8px}
+.tfpop input[type=search]{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink)}
+.tfpop .tfacts{display:flex;gap:6px}
+.tfpop .tfacts button{font:inherit;font-size:12.5px;flex:1;background:var(--chip);color:var(--ink);border:0;border-radius:6px;padding:5px;cursor:pointer}
+.tfpop .tfdone{font:inherit;font-weight:600;background:var(--accent);color:#fff;border:0;border-radius:7px;padding:7px;cursor:pointer}
+.tfpop ul{list-style:none;margin:0;padding:0;max-height:260px;overflow:auto;display:flex;flex-direction:column}
+.tfpop li label{display:flex;gap:8px;align-items:center;padding:5px 4px;border-radius:6px;color:var(--ink);cursor:pointer}
+.tfpop li label:hover{background:var(--chip)}
+footer{color:var(--muted);font-size:12px;margin-top:40px}
+@media (max-width:560px){h1{font-size:22px}.score{min-width:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>DingusBlyats2026 <span>Matchups</span></h1>
+      <div class="sub" id="sub">Loading…</div>
+    </div>
+    
+  </header>
+  
+  <div id="warn"></div>
+
+<section id="tab-m" class="hidden">
+  <h2>Total category record</h2>
+  <div class="mcontrols">
+    <label>From <select id="wfrom"></select></label>
+    <label>to <select id="wto"></select></label>
+    <label><input type="checkbox" id="onlym"> Only actual matchups</label>
+    <div class="tfilter">
+      <button id="tfbtn" type="button" aria-expanded="false" aria-controls="tfpop">Teams: All ▾</button>
+      <div id="tfpop" class="tfpop" hidden>
+        <input id="tfsearch" type="search" placeholder="Search teams" aria-label="Search teams">
+        <div class="tfacts"><button type="button" id="tfall">Select all</button><button type="button" id="tfnone">Clear</button></div>
+        <ul id="tflist"></ul>
+        <button type="button" id="tfdone" class="tfdone">Done</button>
+      </div>
+    </div>
+  </div>
+  <div class="tablebox"><table id="ctab" class="ctab"></table></div>
+  <div class="legend">Click any column header to sort (highest first); click again to flip, a third time to reset. Use Teams to show only the teams you pick; ranks stay league-wide. Each category % = share of head-to-heads won against every other team, every week in the range (ties count half). ALL = all nine categories together. Record = actual weekly matchups in finished weeks (category W-L-T in parentheses). "Only actual matchups" limits the comparisons to the team you really played each week.</div>
+
+  <h2>Weekly matchup comparisons</h2>
+  <div class="mcontrols">
+    <label>Week <select id="wsel"></select></label>
+    <label>Team <select id="tsel"></select></label>
+  </div>
+  <div id="mgrid" class="mgrid"></div>
+  <div class="legend">Green = the team in the title beats that team in the category that week, red = loses, yellow = tie. The team-name cell shows the overall matchup result against that team (category W-L-T) in the same colors. Outlined row = actual opponent. Bottom row = share of the league beaten in each category. Click a header to sort every card by that category; the team's own row stays on top and Win % stays at the bottom.</div>
+</section>
+  <footer id="foot"></footer>
+</div>
+<script>window.PUBLIC_SITE=true;</script>
+<script>
+const $ = s => document.querySelector(s);
+const fmt = (v,d=1) => v==null ? "–" : Number(v).toFixed(d);
+
+
+function esc(s){return String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function niceDate(d){return new Date(d+"T12:00:00").toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})}
+
+
+/* ------------------------------------------------------------ Sortable tables
+   Click a header: numbers sort highest first, text A-Z; click again to flip; a third click
+   restores the original order. Rows marked data-pin="top"/"bottom" never move. Tables that
+   share a data-sort key (all game tables, all matchup cards) sort together. */
+const SORT = {};
+function cellVal(td){
+  if(!td) return null;
+  const raw = td.dataset.v !== undefined ? td.dataset.v : td.textContent.trim();
+  if(raw === "" || raw === "–" || raw === "-") return null;
+  const t = raw.replace("−","-");
+  return /^[+-]?(\d+\.?\d*|\.\d+)$/.test(t) ? parseFloat(t) : raw;
+}
+function applySort(table){
+  const key = table.dataset.sort, st = SORT[key], body = table.tBodies[0];
+  if(!body) return;
+  const rows = [...body.rows];
+  rows.forEach((r,i)=>{ if(r.dataset.i === undefined) r.dataset.i = i; });
+  const top = rows.filter(r=>r.dataset.pin==="top"), bot = rows.filter(r=>r.dataset.pin==="bottom");
+  let mid = rows.filter(r=>!r.dataset.pin);
+  if(st){
+    const vals = new Map(mid.map(r=>[r, cellVal(r.cells[st.col])]));
+    const numeric = [...vals.values()].every(v=>v===null || typeof v==="number");
+    mid.sort((a,b)=>{
+      const x=vals.get(a), y=vals.get(b);
+      if(x===null && y===null) return a.dataset.i - b.dataset.i;
+      if(x===null) return 1; if(y===null) return -1;
+      const c = numeric ? x-y : String(x).localeCompare(String(y));
+      return (c || (a.dataset.i - b.dataset.i)) * (c ? st.dir : 1);
+    });
+  } else mid.sort((a,b)=>a.dataset.i - b.dataset.i);
+  [...top, ...mid, ...bot].forEach(r=>body.appendChild(r));
+  [...table.tHead.rows[0].cells].forEach((th,i)=>{
+    if(st && st.col===i) th.setAttribute("aria-sort", st.dir<0 ? "descending" : "ascending");
+    else th.removeAttribute("aria-sort");
+  });
+}
+function sortable(table, key){
+  if(!table || !table.tHead) return;
+  table.dataset.sort = key;
+  [...table.tHead.rows[0].cells].forEach((th,i)=>{
+    th.classList.add("sortable"); th.tabIndex = 0;
+    const go = ()=>{
+      const body = table.tBodies[0];
+      const sample = body ? [...body.rows].filter(r=>!r.dataset.pin).map(r=>cellVal(r.cells[i])) : [];
+      const numeric = sample.every(v=>v===null || typeof v==="number");
+      const first = numeric ? -1 : 1, st = SORT[key];
+      if(!st || st.col!==i) SORT[key] = {col:i, dir:first};
+      else if(st.dir===first) SORT[key] = {col:i, dir:-first};
+      else delete SORT[key];
+      document.querySelectorAll(`table[data-sort="${key}"]`).forEach(applySort);
+    };
+    th.onclick = go;
+    th.onkeydown = e=>{ if(e.key==="Enter" || e.key===" "){ e.preventDefault(); go(); } };
+  });
+  applySort(table);
+}
+
+/* ------------------------------------------------------------ Matchups tab */
+const CATS=[["fg","FG%"],["ft","FT%"],["fg3m","3PM"],["pts","PTS"],["reb","REB"],["ast","AST"],["stl","STL"],["blk","BLK"],["tov","TO"]];
+let FX=null;
+function cv(t,c){ if(c==="fg") return t.fga?t.fgm/t.fga:0; if(c==="ft") return t.fta?t.ftm/t.fta:0; return t[c]; }
+function cmp(a,b,c){ const x=cv(a,c),y=cv(b,c); if(Math.abs(x-y)<1e-12) return 0; return (c==="tov"?(x<y):(x>y))?1:-1; }
+function fmtc(t,c){ return c==="fg"?(t.fga?(t.fgm/t.fga).toFixed(4):"–"):c==="ft"?(t.fta?(t.ftm/t.fta).toFixed(4):"–"):t[c]; }
+function oppOf(w,tid){ for(const [a,b] of w.matchups){ if(a===tid) return b; if(b===tid) return a; } return null; }
+function heat(p){ // 0..100 -> red..yellow..green
+  const h = p<50 ? 8+(p/50)*42 : 50+((p-50)/50)*80;
+  return `background:hsl(${h} 70% var(--hl,85%));color:hsl(${h} 70% var(--hd,22%))`;
+}
+function weekLabel(w){ return `Week ${w.week}${w.final?"":" (live)"}`; }
+async function loadFX(){
+  if(FX) return;
+  FX = await (await fetch("data/fantasy.json",{cache:"no-store"})).json();
+  const W=FX.weeks, lastFinal = Math.max(...W.filter(w=>w.final).map(w=>w.week), W[0].week);
+  const opts = W.map((w,i)=>`<option value="${i}">${weekLabel(w)}</option>`).join("");
+  $("#wfrom").innerHTML=opts; $("#wto").innerHTML=opts; $("#wsel").innerHTML=opts;
+  $("#wfrom").value=0; $("#wto").value=W.length-1; $("#wsel").value=W.length-1;
+  const names=Object.entries(FX.teams).sort((a,b)=>a[1].localeCompare(b[1]));
+  $("#tsel").innerHTML = `<option value="ALL">All teams</option>`+names.map(([id,n])=>`<option value="${id}">${esc(n)}${id===FX.my_team_id?" (you)":""}</option>`).join("");
+  $("#tsel").value = FX.my_team_id || "ALL";
+  ["#wfrom","#wto","#onlym"].forEach(s=>$(s).onchange=renderRecord);
+  tfLoad(); tfBuild();
+  ["#wsel","#tsel"].forEach(s=>$(s).onchange=renderWeek);
+  renderRecord(); renderWeek();
+}
+/* Team filter for the category record table (Excel-style checklist). Ranks stay league-wide. */
+let TF = null; // null = all teams; otherwise a Set of team ids
+function tfLoad(){ try{ const v=JSON.parse(localStorage.getItem("tf-teams")||"null"); if(Array.isArray(v)) TF=new Set(v.filter(id=>FX.teams[id])); if(TF && !TF.size) TF=null; }catch(e){} }
+function tfSave(){ try{ TF ? localStorage.setItem("tf-teams", JSON.stringify([...TF])) : localStorage.removeItem("tf-teams"); }catch(e){} }
+function tfLabel(){
+  const b=$("#tfbtn"), n=TF?TF.size:0, all=Object.keys(FX.teams).length;
+  b.textContent = !TF ? "Teams: All ▾" : n===1 ? `Teams: ${FX.teams[[...TF][0]]} ▾` : `Teams: ${n} of ${all} ▾`;
+  b.classList.toggle("on", !!TF);
+}
+function tfBuild(){
+  const ids=Object.keys(FX.teams).sort((a,b)=>FX.teams[a].localeCompare(FX.teams[b]));
+  $("#tflist").innerHTML = ids.map(id=>`<li data-name="${esc(FX.teams[id].toLowerCase())}"><label><input type="checkbox" value="${id}" ${!TF||TF.has(id)?"checked":""}> ${esc(FX.teams[id])}${id===FX.my_team_id?' <span class="tag mine">YOU</span>':''}</label></li>`).join("");
+  $("#tflist").onchange = ()=>{
+    const on=[...$("#tflist").querySelectorAll("input:checked")].map(i=>i.value);
+    TF = on.length===ids.length ? null : new Set(on);
+    tfSave(); tfLabel(); renderRecord();
+  };
+  const setAll = v=>{ $("#tflist").querySelectorAll("input").forEach(i=>i.checked=v); TF = v ? null : new Set(); tfSave(); tfLabel(); renderRecord(); };
+  $("#tfall").onclick = ()=>setAll(true);
+  $("#tfnone").onclick = ()=>setAll(false);
+  $("#tfsearch").oninput = e=>{ const q=e.target.value.trim().toLowerCase();
+    $("#tflist").querySelectorAll("li").forEach(li=>li.hidden = q && !li.dataset.name.includes(q)); };
+  const pop=$("#tfpop"), btn=$("#tfbtn");
+  const close=()=>{ pop.hidden=true; btn.setAttribute("aria-expanded","false"); };
+  // keep the panel on screen on narrow phones: shift it left of the button if needed
+  const place=()=>{ if(pop.hidden) return; pop.style.left="0px";
+    const r=pop.getBoundingClientRect(), vw=document.documentElement.clientWidth;
+    const shift = Math.min(0, vw - 16 - r.right) + Math.max(0, 16 - r.left);
+    pop.style.left = shift + "px"; };
+  btn.onclick = ()=>{ const open=pop.hidden; pop.hidden=!open; btn.setAttribute("aria-expanded", String(open)); if(open){ place(); $("#tfsearch").focus(); } };
+  $("#tfdone").onclick = ()=>{ close(); btn.focus(); };
+  window.addEventListener("resize", place);
+  // close on any press outside the filter (capture phase, so nothing on the page can swallow it)
+  document.addEventListener("pointerdown", e=>{ if(!pop.hidden && !e.target.closest(".tfilter")) close(); }, true);
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !pop.hidden){ close(); btn.focus(); } });
+  tfLabel();
+}
+function renderRecord(){
+  let a=+$("#wfrom").value, b=+$("#wto").value; if(a>b){[a,b]=[b,a];}
+  const only=$("#onlym").checked, W=FX.weeks.slice(a,b+1), ids=Object.keys(FX.teams);
+  const rows=ids.map(tid=>{
+    const per={}; CATS.forEach(([c])=>per[c]=[0,0]); let mw=0,ml=0,mt=0,cw=0,cl=0,ct=0;
+    for(const w of W){
+      const me=w.totals[tid], opp=oppOf(w,tid);
+      const others = only ? (opp?[opp]:[]) : ids.filter(x=>x!==tid);
+      for(const o of others) for(const [c] of CATS){ const r=cmp(me,w.totals[o],c); per[c][0]+= r>0?1:r===0?.5:0; per[c][1]++; }
+      if(opp && w.final){ let ww=0,ll=0,tt=0; for(const [c] of CATS){const r=cmp(me,w.totals[opp],c); r>0?ww++:r<0?ll++:tt++;}
+        cw+=ww;cl+=ll;ct+=tt; ww>ll?mw++:ww<ll?ml++:mt++; }
+    }
+    const pct={}; let s=0,n=0; for(const [c] of CATS){ pct[c]=per[c][1]?100*per[c][0]/per[c][1]:0; s+=per[c][0]; n+=per[c][1]; }
+    return {tid,name:FX.teams[tid],pct,all:n?100*s/n:0,mw,ml,mt,cw,cl,ct};
+  }).sort((x,y)=>y.all-x.all).map((r,i)=>({...r, rank:i+1})).filter(r=>!TF || TF.has(r.tid));
+  if(!rows.length){ $("#ctab").innerHTML=`<tbody><tr><td style="color:var(--muted);text-align:left">No teams selected. Use the Teams filter to pick some.</td></tr></tbody>`; return; }
+  $("#ctab").innerHTML=`<thead><tr><th>Rank</th><th>Team</th><th>Record</th>${CATS.map(([,l])=>`<th>${l}</th>`).join("")}<th>ALL</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr class="${r.tid===FX.my_team_id?'me':''}"><td>${r.rank}</td><td data-v="${esc(r.name)}">${esc(r.name)}${r.tid===FX.my_team_id?' <span class="tag mine">YOU</span>':''}</td>
+      <td class="n" data-v="${(r.mw-r.ml)*1000+(r.cw-r.cl)}">${r.mw}-${r.ml}${r.mt?'-'+r.mt:''} <span class="vs">(${r.cw}-${r.cl}-${r.ct})</span></td>
+      ${CATS.map(([c])=>`<td class="pct" data-v="${r.pct[c].toFixed(3)}" style="${heat(r.pct[c])}">${Math.round(r.pct[c])}</td>`).join("")}
+      <td class="pct" data-v="${r.all.toFixed(3)}" style="${heat(r.all)}">${Math.round(r.all)}</td></tr>`).join("")+"</tbody>";
+  sortable($("#ctab"), "record");
+}
+function card(w,tid){
+  const ids=Object.keys(FX.teams), me=w.totals[tid], opp=oppOf(w,tid);
+  const order=[tid, ...(opp?[opp]:[]), ...ids.filter(x=>x!==tid&&x!==opp).sort((x,y)=>FX.teams[x].localeCompare(FX.teams[y]))];
+  const winp={}; let aw=0,al=0,at=0;
+  CATS.forEach(([c])=>{ let s=0; ids.filter(x=>x!==tid).forEach(o=>{const r=cmp(me,w.totals[o],c); s+=r>0?1:r===0?.5:0;}); winp[c]=100*s/(ids.length-1); });
+  ids.filter(x=>x!==tid).forEach(o=>{ let ww=0,ll=0; CATS.forEach(([c])=>{const r=cmp(me,w.totals[o],c); if(r>0)ww++; else if(r<0)ll++;}); ww>ll?aw++:ww<ll?al++:at++; });
+  let res=""; if(opp){ let ww=0,ll=0,tt=0; CATS.forEach(([c])=>{const r=cmp(me,w.totals[opp],c); r>0?ww++:r<0?ll++:tt++;}); res=`vs <b>${esc(FX.teams[opp])}</b>: ${w.final?'':'currently '}<b>${ww}-${ll}-${tt}</b> · `; }
+  const tr=(o)=>{ const t=w.totals[o], self=o===tid;
+    let nm=`<td data-v="${esc(FX.teams[o])}">${esc(FX.teams[o])}</td>`;
+    if(!self){ let ww=0,ll=0,tt=0; CATS.forEach(([c])=>{const r=cmp(me,t,c); r>0?ww++:r<0?ll++:tt++;});
+      const k = ww>ll?'w':ww<ll?'l':'t';
+      nm=`<td class="${k}" data-v="${esc(FX.teams[o])}" style="font-weight:600">${esc(FX.teams[o])} <span class="rs">${ww}-${ll}-${tt}</span></td>`; }
+    return `<tr class="${self?'self':''} ${o===opp?'opp':''}"${self?' data-pin="top"':''}>${nm}${CATS.map(([c])=>{
+      if(self) return `<td class="n">${fmtc(t,c)}</td>`; const r=cmp(me,t,c); return `<td class="n ${r>0?'w':r<0?'l':'t'}">${fmtc(t,c)}</td>`; }).join("")}</tr>`; };
+  return `<div class="mcard"><h3>${esc(FX.teams[tid])} · ${weekLabel(w)}</h3>
+    <div class="msub">${res}all-play <b>${aw}-${al}${at?'-'+at:''}</b> vs. the league</div>
+    <div style="overflow-x:auto"><table class="mtab"><thead><tr><th>Team</th>${CATS.map(([,l])=>`<th>${l}</th>`).join("")}</tr></thead>
+    <tbody>${order.map(tr).join("")}
+    <tr class="foot" data-pin="bottom"><td>Win %</td>${CATS.map(([c])=>`<td class="pct" style="${heat(winp[c])}">${Math.round(winp[c])}</td>`).join("")}</tr></tbody></table></div></div>`;
+}
+function renderWeek(){
+  const w=FX.weeks[+$("#wsel").value], t=$("#tsel").value;
+  const ids = t==="ALL" ? [FX.my_team_id,...Object.keys(FX.teams).filter(x=>x!==FX.my_team_id).sort((a,b)=>FX.teams[a].localeCompare(FX.teams[b]))].filter(Boolean) : [t];
+  let note = w.final ? "" : `<div class="legend" style="grid-column:1/-1;margin:0 0 4px">Week in progress: totals through last night (${w.days_with_games} game day${w.days_with_games===1?'':'s'} so far). Updates every morning.</div>`;
+  $("#mgrid").classList.toggle("one", ids.length===1);
+  $("#mgrid").innerHTML = note + ids.map(id=>card(w,id)).join("");
+  document.querySelectorAll("#mgrid table.mtab").forEach(t=>sortable(t,"mcard"));
+}
+
+if (window.PUBLIC_SITE) {
+  // Matchups-only build for the league: no free-agent tab, no date bar.
+  document.querySelector(".tabs")?.classList.add("hidden");
+  document.querySelector(".datebar")?.classList.add("hidden");
+  $("#tab-ups")?.remove();
+  $("#tab-m").classList.remove("hidden");
+  loadFX().then(()=>{
+    $("#sub").textContent = `${Object.keys(FX.teams).length}-team H2H 9-cat · weekly category comparisons`;
+    $("#foot").textContent = `Updated ${new Date(FX.updated).toLocaleString()} · totals rebuilt from Fantrax daily lineups and ESPN box scores`;
+  }).catch(e=>{$("#sub").textContent="No data yet."; console.error(e);});
+}
+
+</script>
+</body>
+</html>
